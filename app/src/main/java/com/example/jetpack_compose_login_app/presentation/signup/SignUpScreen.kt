@@ -1,4 +1,4 @@
-package com.example.jetpack_compose_signup_app
+package com.example.jetpack_compose_login_app.presentation.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,16 +19,20 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.navigation.NavHostController
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
-import com.example.jetpack_compose_login_app.database.UserModelViewModel
+import org.koin.androidx.compose.koinViewModel
 import java.util.regex.Pattern
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(navController: NavHostController, vm: UserModelViewModel) {
+fun SignUpScreen(
+    navToLogin: () -> Unit,
+    popBackStack: () -> Unit,
+) {
+
+    val signupViewModel: SignupViewModel = koinViewModel()
     var fullName by remember { mutableStateOf(TextFieldValue("")) }
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
@@ -61,7 +65,7 @@ fun SignUpScreen(navController: NavHostController, vm: UserModelViewModel) {
     Scaffold(topBar = {
         TopAppBar(title = { Text("Sign Up", fontSize = 20.sp) }, navigationIcon = {
             IconButton(onClick = {
-                navController.popBackStack() // Navigate back
+                popBackStack.invoke() // Navigate back
             }) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
             }
@@ -232,10 +236,10 @@ fun SignUpScreen(navController: NavHostController, vm: UserModelViewModel) {
 
                     if (!fullNameError && !emailError && !passwordError && !confirmPasswordError && !isNotMatching.value && isEmailValid.value) {
                         // Perform sign-up logic
-                        vm.addData(
+                        signupViewModel.signup(
                             fullName.text, email.text, password.text
                         )
-                        navController.navigate("login") // Navigate to the main screen
+                        navToLogin.invoke() // Navigate to the main screen
                     }
                 }, modifier = Modifier.fillMaxWidth()
             ) {

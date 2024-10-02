@@ -1,4 +1,4 @@
-package com.example.jetpack_compose_login_app
+package com.example.jetpack_compose_login_app.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -12,25 +12,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.example.jetpack_compose_login_app.database.UserModel
-import com.example.jetpack_compose_login_app.database.UserModelViewModel
-import kotlinx.coroutines.launch
+import com.example.jetpack_compose_login_app.R
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController, vm: UserModelViewModel) {
+fun LoginScreen(
+    navToSignUp: () -> Unit,
+    navToMain: () -> Unit,
+) {
+
+    val loginViewModel: LoginViewModel = koinViewModel()
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var password by remember { mutableStateOf(TextFieldValue("")) }
     var emailError by remember { mutableStateOf(false) }
@@ -114,10 +115,10 @@ fun LoginScreen(navController: NavHostController, vm: UserModelViewModel) {
                 emailError = email.text.isEmpty()
                 passwordError = password.text.isEmpty()
                 if (!emailError && !passwordError) {
-                    vm.getUserByEmail(email.text) { res ->
+                    loginViewModel.login(email.text) { res ->
                         if (res != null) {
                             if (res.password == password.text) {
-                                navController.navigate("main")
+                                navToMain.invoke()
                             } else {
                                 //add popup for invalid password
                                 print(res)
@@ -136,7 +137,7 @@ fun LoginScreen(navController: NavHostController, vm: UserModelViewModel) {
                 modifier = Modifier
                     .padding(vertical = 10.dp)
                     .clickable {
-                        navController.navigate("signUp")
+                        navToSignUp.invoke()
                     })
         }
     }

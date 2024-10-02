@@ -1,4 +1,4 @@
-package com.example.jetpack_compose_login_app
+package com.example.jetpack_compose_login_app.presentation.profile
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import java.util.Locale
 
 import android.app.Activity
+import com.example.jetpack_compose_login_app.R
 
 
 fun setLocale(context: Context, languageCode: String) {

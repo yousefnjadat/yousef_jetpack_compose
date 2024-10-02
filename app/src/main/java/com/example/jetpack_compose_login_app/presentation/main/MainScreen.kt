@@ -1,4 +1,4 @@
-package com.example.jetpack_compose_login_app
+package com.example.jetpack_compose_login_app.presentation.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -9,6 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.jetpack_compose_login_app.presentation.BottomNavigationBar
+import com.example.jetpack_compose_login_app.presentation.home.HomeScreen
+import com.example.jetpack_compose_login_app.presentation.profile.ProfileScreen
+import com.example.jetpack_compose_login_app.presentation.settings.SettingsScreen
 
 @Composable
 fun MainScreen() {

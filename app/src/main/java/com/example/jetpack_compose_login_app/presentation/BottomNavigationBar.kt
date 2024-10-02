@@ -1,8 +1,7 @@
-package com.example.jetpack_compose_login_app
+package com.example.jetpack_compose_login_app.presentation
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home

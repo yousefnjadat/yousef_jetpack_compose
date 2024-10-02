@@ -1,4 +1,4 @@
-package com.example.jetpack_compose_login_app
+package com.example.jetpack_compose_login_app.presentation.home
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,23 +9,45 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.jetpack_compose_login_app.data.models.MyDataModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun HomeScreen(viewModel: MyViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-    val data by viewModel.data.collectAsState()
+fun HomeScreen(
+) {
+    val viewModel: HomeViewModel = koinViewModel()
+    val homeUiState by viewModel.homeUiState.collectAsState()
 
-    // Use LazyColumn to display a list of cards
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp), // Padding around the list
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Spacing between cards
-    ) {
-        items(data) { item ->
-            MyCard(item)
+    when (homeUiState) {
+        is HomeUiState.Init -> {
+            // do nothing
         }
+
+        is HomeUiState.Loading -> {
+            Text(text = "Loading....")
+        }
+
+        is HomeUiState.UserData -> {
+            // Use LazyColumn to display a list of cards
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp), // Padding around the list
+                verticalArrangement = Arrangement.spacedBy(16.dp) // Spacing between cards
+            ) {
+                items((homeUiState as HomeUiState.UserData).users) { item ->
+                    MyCard(item)
+                }
+            }
+        }
+
+        is HomeUiState.ErrorMessage -> {
+            Text(text = (homeUiState as HomeUiState.ErrorMessage).message)
+        }
+
     }
+
 }
 
 @Composable
